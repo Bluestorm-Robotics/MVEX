@@ -23,7 +23,7 @@ int main() {
    
     while(1) {
        if(controller1.ButtonA.pressing()){
-    ClawMotor.spin(forward);
+    RightMotor.spinFor(90, degrees);
 }
         // Allow other tasks to run
         this_thread::sleep_for(10);
