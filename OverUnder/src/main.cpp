@@ -7,7 +7,7 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
-
+#include <Robot.h>
 using namespace vex;
 
 // A global instance of vex::brain used for printing to the V5 brain screen
@@ -15,12 +15,7 @@ vex::brain       Brain;
 
 // define your global instances of motors and other devices here
 
-controller controller1 = controller(controllerType::primary);
 
-motor leftMotor = motor(PORT1);
-motor RightMotor = motor(PORT2);
-motor ClawMotor = motor(PORT8);
-motor ArmMotor = motor(PORT7);
 
 int main() {
 
