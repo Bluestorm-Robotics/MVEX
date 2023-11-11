@@ -1,23 +1,26 @@
 
 #pragma once
 #include "vex.h"
-//Call the namespace so you don't have to add vex:: in front of everything
+#ifndef ROBOT_H
+#define ROBOT_H
+
 using namespace vex;
 
 
-#ifndef ROBOT_H
-#define ROBOT_H
-#endif 
+
+
+extern vex::motor_group myDrivetrain;
+extern vex::brain Brain;
+extern controller controller1;
 
 void vexcodeInit(void);
 
-extern vex::motor leftMotor;
-extern vex::motor rightMotor;
-extern vex::motor_group myDrivetrain;
-extern vex::brain Brain;
-extern vex::motor ClawMotor;
-extern vex::motor ArmMotor;
-controller controller1 = controller(controllerType::primary);
+void driveForward(float inches);
+void driveBackward(float inches);
+void turnRight(float degrees);
+void turnLeft(float degrees);
+
+#endif
 
 motor leftMotor = motor(PORT1);
 motor RightMotor = motor(PORT2);
@@ -65,7 +68,7 @@ void driveForward(float inches){
         leftMotor.spinFor(
         wheelDegrees * GEAR_RATIO / 2, rotationUnits::deg, 
         AUTON_DRIVE_PCT, velocityUnits::pct, false);//false means don't wait for completion
-        rightMotor.spinFor(
+        RightMotor.spinFor(
         -wheelDegrees * GEAR_RATIO / 2, rotationUnits::deg, 
         AUTON_DRIVE_PCT, velocityUnits::pct);}
     
@@ -73,7 +76,7 @@ void driveForward(float inches){
     // Note: +90 degrees is a right turn
     float turningRatio = TURNING_DIAMETER / WHEEL_DIAMETER;
     float wheelDegrees = turningRatio * degrees;  
-    rightMotor.spinFor(
+    RightMotor.spinFor(
         -wheelDegrees * GEAR_RATIO / 2, rotationUnits::deg,
         AUTON_DRIVE_PCT, velocityUnits::pct,false);
     leftMotor.spinFor( 
