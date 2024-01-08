@@ -24,6 +24,9 @@ motor frontRight = motor(PORT1);
 motor backLeft = motor(PORT15);
 motor backRight = motor(PORT5);
 
+//Arm Motor
+motor Arm = motor(PORT10);
+
 //motor groups TANK layout :)
 motor_group leftDrive(frontLeft, backLeft);
 motor_group rightDrive(frontRight, backRight);
@@ -44,6 +47,27 @@ void controlls(){
    }
 }
 
+void ArmCONTROL(){
+
+    while (true) {
+
+    Arm.setVelocity(100, percent);
+    Arm.spin(forward);
+
+    wait(1, seconds);
+
+    Arm.setVelocity(100, percent);
+    Arm.spin(reverse);
+
+    wait(1, seconds);
+
+
+
+
+    }
+}
+
+
 
 int main() {
     Brain.Screen.printAt( 10, 50, "Hello V5" );
@@ -51,6 +75,7 @@ int main() {
     while(1) {
        controlls();
         // Allow other tasks to run
+        ArmCONTROL();
         this_thread::sleep_for(10);
     }
 }
