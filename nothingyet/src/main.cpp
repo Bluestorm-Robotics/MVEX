@@ -11,8 +11,8 @@
 
 using namespace vex;
 // A global instance of vex::brain used for printing to the V5 brain screen
-vex::brain       Brain;
-vex::controller       controller1;
+brain       Brain;
+controller       controller1;
 
 
 // define your global instances of motors and other devices here
@@ -21,11 +21,11 @@ motor frontLeft = motor(PORT11);
 motor frontRight = motor(PORT1);
 
 //Rear Motors
-motor backLeft = motor(PORT16);
+motor backLeft = motor(PORT15);
 motor backRight = motor(PORT5);
 
 //motor groups TANK layout :)
-motor_group leftDrive(frontLeft, backRight);
+motor_group leftDrive(frontLeft, backLeft);
 motor_group rightDrive(frontRight, backRight);
 motor_group awd(frontLeft, frontRight, backLeft, backRight);
 void controlls(){
@@ -33,11 +33,11 @@ void controlls(){
   // leftDrive.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
    if(controller1.Axis4.position() > 25){
         leftDrive.spin(directionType::fwd);
-        rightDrive.spin(directionType::rev);
-   }
-    if(controller1.Axis4.position() < -25){
-        leftDrive.spin(directionType::rev);
         rightDrive.spin(directionType::fwd);
+   }
+    else if(controller1.Axis3.position() < -25){
+        leftDrive.spin(directionType::rev);
+        rightDrive.spin(directionType::rev);
    }
    else{
     awd.stop(coast);
