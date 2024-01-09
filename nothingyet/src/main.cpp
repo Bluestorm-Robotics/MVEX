@@ -31,26 +31,37 @@ motor_group leftDrive(frontLeft, backLeft);
 motor_group rightDrive(frontRight, backRight);
 motor_group awd(frontLeft, frontRight, backLeft, backRight);
 void controlls(){
-    backRight.setReversed(true);
-    frontRight.setReversed(true);
+    /*leftDrive.spin(directionType::fwd, controller1.Axis4.position() + controller1.Axis3.position(), percentUnits::pct);
+    rightDrive.spin(directionType::fwd, controller1.Axis4.position() - controller1.Axis3.position(), percentUnits::pct);*/
   // awd.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
   // leftDrive.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
-   if(controller1.Axis4.position() > -25){
-        leftDrive.spin(directionType::rev);
-        rightDrive.spin(directionType::fwd);
+   int lineNum = 1;
+   if(controller1.Axis4.position() < -80){
+        //leftDrive.spin(directionType::rev);
+        //rightDrive.spin(directionType::fwd);
+        Brain.Screen.print("Turning left %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
    }
-    else if(controller1.Axis4.position() < 25){
-        leftDrive.spin(directionType::fwd);
-        rightDrive.spin(directionType::rev);
+    else if(controller1.Axis4.position() > 80){
+       // leftDrive.spin(directionType::fwd);
+        //rightDrive.spin(directionType::rev);
+        Brain.Screen.print("Hard to Starboard!! %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
    }
-   else if(controller1.Axis3.position() < 25){
-        awd.spin(directionType::fwd);
+   else if(controller1.Axis3.position() > 80){
+        //awd.spin(directionType::fwd);
+        Brain.Screen.print("Full steam ahead! %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
     }
-    else if(controller1.Axis3.position() < -25){
-       awd.spin(directionType::rev); 
+    else if(controller1.Axis3.position() < -80){
+       //awd.spin(directionType::rev); 
+        Brain.Screen.print("Reverse!!! %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
     }
    else{
-    awd.stop(coast);
+    //awd.stop(coast);
+        //Brain.Screen.print("Coasting %f\n", Brain.Timer.value());
+        //Brain.Screen.newLine();
    }
 }
 
@@ -75,22 +86,29 @@ void ArmCONTROL(){
 }
 
 void ArmFling(){
-    if(controller1.ButtonA.PRESSED){
-        Arm.setVelocity(100, percent);
-        Arm.spin(forward);
+    if (controller1.ButtonA.pressing() == true){
+        Arm.spin(directionType::fwd); 
     }
-    else if(controller1.ButtonB.PRESSED){
+    /*else if(controller1.ButtonB.PRESSED){
         Arm.setVelocity(100, percent);
         Arm.spin(reverse);
-    }
+    }*/
 }
 
 int main() {
-    Brain.Screen.printAt( 10, 50, "Hello V5" );
+    Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
+    Brain.Screen.newLine();
+    backRight.setReversed(true);
+    frontRight.setReversed(true);
    
     while(1) {
        controlls();
        ArmFling();
+       if(Brain.Screen.row() > 11){
+            Brain.Screen.clearScreen();
+            Brain.Screen.setCursor(1, 2);
+       }
+       //ArmFling();
         // Allow other tasks to run
         //ArmCONTROL();
         this_thread::sleep_for(10);
