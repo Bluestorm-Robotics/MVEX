@@ -23,7 +23,7 @@ motor frontRight = motor(PORT1);
 motor backLeft = motor(PORT15);
 motor backRight = motor(PORT5);
 
-//Arm Motorc
+//Arm Motor
 motor Arm = motor(PORT10);
 
 //motor groups TANK layout :)
@@ -36,17 +36,20 @@ void controlls(){
   // awd.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
   // leftDrive.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
    if(controller1.Axis4.position() > -25){
-        leftDrive.spin(directionType::fwd);
+        leftDrive.spin(directionType::rev);
         rightDrive.spin(directionType::fwd);
    }
     else if(controller1.Axis4.position() < 25){
-        leftDrive.spin(directionType::rev);
+        leftDrive.spin(directionType::fwd);
         rightDrive.spin(directionType::rev);
    }
    else if(controller1.Axis3.position() < 25){
-    awd.spin(directionType::fwd)
+        awd.spin(directionType::fwd);
     }
-  else{
+    else if(controller1.Axis3.position() < -25){
+       awd.spin(directionType::rev); 
+    }
+   else{
     awd.stop(coast);
    }
 }
