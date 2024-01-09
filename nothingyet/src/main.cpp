@@ -24,7 +24,7 @@ motor frontRight = motor(PORT1);
 motor backLeft = motor(PORT16);
 motor backRight = motor(PORT5);
 
-//Arm Motor
+//Arm Motorc
 motor Arm = motor(PORT10);
 
 //motor groups TANK layout :)
