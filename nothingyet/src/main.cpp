@@ -11,9 +11,8 @@
 
 using namespace vex;
 // A global instance of vex::brain used for printing to the V5 brain screen
-vex::brain       Brain;
-vex::controller       controller1;
-
+brain       Brain;
+controller       controller1;
 
 // define your global instances of motors and other devices here
 // Front motors
@@ -21,28 +20,33 @@ motor frontLeft = motor(PORT11);
 motor frontRight = motor(PORT1);
 
 //Rear Motors
-motor backLeft = motor(PORT16);
+motor backLeft = motor(PORT15);
 motor backRight = motor(PORT5);
 
 //Arm Motorc
 motor Arm = motor(PORT10);
 
 //motor groups TANK layout :)
-motor_group leftDrive(frontLeft, backRight);
+motor_group leftDrive(frontLeft, backLeft);
 motor_group rightDrive(frontRight, backRight);
 motor_group awd(frontLeft, frontRight, backLeft, backRight);
 void controlls(){
+    backRight.setReversed(true);
+    frontRight.setReversed(true);
   // awd.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
   // leftDrive.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
-   if(controller1.Axis4.position() > 25){
+   if(controller1.Axis4.position() > -25){
         leftDrive.spin(directionType::fwd);
-        rightDrive.spin(directionType::rev);
-   }
-    if(controller1.Axis4.position() < -25){
-        leftDrive.spin(directionType::rev);
         rightDrive.spin(directionType::fwd);
    }
-   else{
+    else if(controller1.Axis4.position() < 25){
+        leftDrive.spin(directionType::rev);
+        rightDrive.spin(directionType::rev);
+   }
+   else if(controller1.Axis3.position() < 25){
+    awd.spin(directionType::fwd)
+    }
+  else{
     awd.stop(coast);
    }
 }
@@ -67,15 +71,25 @@ void ArmCONTROL(){
     }
 }
 
-
+void ArmFling(){
+    if(controller1.ButtonA.PRESSED){
+        Arm.setVelocity(100, percent);
+        Arm.spin(forward);
+    }
+    else if(controller1.ButtonB.PRESSED){
+        Arm.setVelocity(100, percent);
+        Arm.spin(reverse);
+    }
+}
 
 int main() {
     Brain.Screen.printAt( 10, 50, "Hello V5" );
    
     while(1) {
        controlls();
+       ArmFling();
         // Allow other tasks to run
-        ArmCONTROL();
+        //ArmCONTROL();
         this_thread::sleep_for(10);
     }
 }
