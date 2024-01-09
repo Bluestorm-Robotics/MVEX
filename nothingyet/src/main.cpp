@@ -14,16 +14,14 @@ using namespace vex;
 brain       Brain;
 controller       controller1;
 
-#pragma config(Motor,  PORT5,           backRight,      tmotorVex393_MC29, openLoop, reversed)
-#pragma config(Motor,  PORT1,           frontRight,      tmotorVex393_MC29, openLoop, reversed)
 // define your global instances of motors and other devices here
 // Front motors
 motor frontLeft = motor(PORT11);
-//motor frontRight = motor(PORT1);
+motor frontRight = motor(PORT1);
 
 //Rear Motors
 motor backLeft = motor(PORT15);
-//motor backRight = motor(PORT5);
+motor backRight = motor(PORT5);
 
 //Arm Motor
 motor Arm = motor(PORT10);
@@ -33,6 +31,8 @@ motor_group leftDrive(frontLeft, backLeft);
 motor_group rightDrive(frontRight, backRight);
 motor_group awd(frontLeft, frontRight, backLeft, backRight);
 void controlls(){
+    backRight.setReversed(true);
+    frontRight.setReversed(true);
   // awd.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
   // leftDrive.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
    if(controller1.Axis4.position() > -25){
