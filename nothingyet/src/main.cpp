@@ -30,36 +30,38 @@ motor Arm = motor(PORT10);
 motor_group leftDrive(frontLeft, backLeft);
 motor_group rightDrive(frontRight, backRight);
 motor_group awd(frontLeft, frontRight, backLeft, backRight);
+int mtrVolt = 8; //MAX 12V DC
 void controlls(){
     /*leftDrive.spin(directionType::fwd, controller1.Axis4.position() + controller1.Axis3.position(), percentUnits::pct);
     rightDrive.spin(directionType::fwd, controller1.Axis4.position() - controller1.Axis3.position(), percentUnits::pct);*/
   // awd.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
   // leftDrive.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
    int lineNum = 1;
+   
    if(controller1.Axis4.position() < -80){
-        //leftDrive.spin(directionType::rev);
-        //rightDrive.spin(directionType::fwd);
+        leftDrive.spin(directionType::rev, mtrVolt, volt);
+        rightDrive.spin(directionType::fwd, mtrVolt, volt);
         Brain.Screen.print("Turning left %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
    }
     else if(controller1.Axis4.position() > 80){
-       // leftDrive.spin(directionType::fwd);
-        //rightDrive.spin(directionType::rev);
+        leftDrive.spin(directionType::fwd, mtrVolt, volt);
+        rightDrive.spin(directionType::rev, mtrVolt, volt);
         Brain.Screen.print("Hard to Starboard!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
    }
    else if(controller1.Axis3.position() > 80){
-        //awd.spin(directionType::fwd);
+        awd.spin(directionType::fwd, mtrVolt, volt);
         Brain.Screen.print("Full steam ahead! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
     }
     else if(controller1.Axis3.position() < -80){
-       //awd.spin(directionType::rev); 
+        awd.spin(directionType::rev, mtrVolt, volt); 
         Brain.Screen.print("Reverse!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
     }
    else{
-    //awd.stop(coast);
+        awd.stop(coast);
         //Brain.Screen.print("Coasting %f\n", Brain.Timer.value());
         //Brain.Screen.newLine();
    }
@@ -87,7 +89,7 @@ void ArmCONTROL(){
 
 void ArmFling(){
     if (controller1.ButtonA.pressing() == true){
-        Arm.spin(directionType::fwd); 
+        Arm.spin(directionType::fwd, mtrVolt, volt); 
     }
     /*else if(controller1.ButtonB.PRESSED){
         Arm.setVelocity(100, percent);
@@ -111,6 +113,6 @@ int main() {
        //ArmFling();
         // Allow other tasks to run
         //ArmCONTROL();
-        this_thread::sleep_for(10);
+        this_thread::sleep_for(1);
     }
 }
