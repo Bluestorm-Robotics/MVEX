@@ -106,13 +106,18 @@ void ArmFling(){
         Arm.stop(brake);
     }     
 }
-
+void PlowContoll(){
+    if(controller1.ButtonR1.pressing() == true){
+     leftPlow.spin(directionType::fwd);
+     rightPlow.spin(directionType::rev);   
+    }
+    if(controller1.ButtonL1.pressing() == true){
+        leftPlow.spin(directionType::rev);
+        rightPlow.spin(directionType::fwd);
+    }
+}
 int main() {
-    plow.stop(brake);
-    Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
-    Brain.Screen.newLine();
-    backRight.setReversed(true);
-    frontRight.setReversed(true);
+  
    
     while(1) {
        //controlls();
@@ -121,6 +126,8 @@ int main() {
             Brain.Screen.clearScreen();
             Brain.Screen.setCursor(1, 2);
        }
+       PlowContoll();
+    
        //ArmFling();
         // Allow other tasks to run
         //ArmCONTROL();
