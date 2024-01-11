@@ -115,8 +115,11 @@ void buttons(){
     plowControlls(); //Plow movement
 }
 void controlls(){ //Umbrella COntrols module
-    driver(); //Movement Controls
-    buttons(); //Button Controls
+    while(1){
+
+        driver(); //Movement Controls
+        buttons(); //Button Controls
+    }
 }
 
 void consoleLog(){
@@ -136,7 +139,6 @@ int main() {
     Competition.drivercontrol(controlls);
     
     init(); //Pre-Autonomos motor configs
-
     while(1) {
         consoleLog(); //On screen debug console
         this_thread::sleep_for(1);
