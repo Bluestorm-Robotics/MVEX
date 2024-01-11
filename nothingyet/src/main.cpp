@@ -11,8 +11,10 @@
 
 using namespace vex;
 // A global instance of vex::brain used for printing to the V5 brain screen
-brain       Brain;
+brain       Brain; //After declaring vex namespace there is no need to use vex::brain
 controller       controller1;
+
+competition Competition; //Competition mode
 
 // define your global instances of motors and other devices here
 // Front motors
@@ -44,8 +46,6 @@ void mtrProperties(){ //Starting motor Defaults
     plow.stop(brake);
 }
 void driver(){
-
-   int lineNum = 1; // Console logging
    
    if(controller1.Axis4.position() < -80){
         leftDrive.spin(directionType::rev, mtrVolt, volt);
@@ -76,15 +76,21 @@ void driver(){
    } 
 }
 
+void autonomous(void){//Autonomous code
+    Brain.Screen.print("Autonomous code started!!! %f\n", Brain.Timer.value());
+    Brain.Screen.newLine();
+}
 
 void armFling(){
     if (controller1.ButtonUp.pressing() == true){
         Arm.spin(directionType::rev, 12.0, volt);
-        Brain.Screen.printAt( 10, 50, "Forwarding arm!" );
+        Brain.Screen.print("Forwarding arm!!! %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
     }
     else if(controller1.ButtonDown.pressing() == true){
         Arm.spin(directionType::fwd, 12.0, volt); 
-        Brain.Screen.printAt( 10, 50, "Reversing Arm!" );
+        Brain.Screen.print("Reversing arm!!! %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
     }
     else{
         Arm.stop(brake);
@@ -120,15 +126,19 @@ void consoleLog(){
         Brain.Screen.setCursor(1, 2);
        }
 }
-
-int main() {
+void init(){
     mtrProperties();
     Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
     Brain.Screen.newLine();
-   
+}
+int main() {
+    Competition.autonomous(autonomous);
+    Competition.drivercontrol(controlls);
+    
+    init(); //Pre-Autonomos motor configs
+
     while(1) {
-        consoleLog();
-        controlls();
+        consoleLog(); //On screen debug console
         this_thread::sleep_for(1);
     }
 }
