@@ -40,6 +40,7 @@ int mtrVolt = 8; //MAX 12V DC
 void mtrProperties(){ //Starting motor Defaults
     backRight.setReversed(true);
     frontRight.setReversed(true);
+    rightPlow.setReversed(true);
     plow.stop(brake);
 }
 void driver(){
@@ -90,24 +91,34 @@ void armFling(){
     }     
 }
 
+void plowControlls(){
+    if(controller1.ButtonR1.pressing() == true){
+     plow.spin(directionType::fwd);  
+    }
+    else if(controller1.ButtonL1.pressing() == true){
+        plow.spin(directionType::rev);
+    }
+    else{
+        plow.stop(brake);
+    }
+}
+
 
 void buttons(){
-    armFling(); 
+    armFling(); //Arm movement
+    plowControlls(); //Plow movement
 }
-void controlls(){
+void controlls(){ //Umbrella COntrols module
     driver(); //Movement Controls
-    btutons(); //Button Controls
+    buttons(); //Button Controls
 }
 
-void PlowContoll(){
-    if(controller1.ButtonR1.pressing() == true){
-     leftPlow.spin(directionType::fwd);
-     rightPlow.spin(directionType::rev);   
-    }
-    if(controller1.ButtonL1.pressing() == true){
-        leftPlow.spin(directionType::rev);
-        rightPlow.spin(directionType::fwd);
-    }
+void consoleLog(){
+
+    if(Brain.Screen.row() > 11){
+        Brain.Screen.clearScreen();
+        Brain.Screen.setCursor(1, 2);
+       }
 }
 
 int main() {
@@ -115,15 +126,8 @@ int main() {
     Brain.Screen.newLine();
    
     while(1) {
-       //driver();
-       //ArmFling();
-       if(Brain.Screen.row() > 11){
-            Brain.Screen.clearScreen();
-            Brain.Screen.setCursor(1, 2);
-       }
-       //ArmFling();
-        // Allow other tasks to run
-        //ArmCONTROL();
+        consoleLog();
+        controlls();
         this_thread::sleep_for(1);
     }
 }
