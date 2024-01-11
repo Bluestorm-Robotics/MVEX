@@ -99,7 +99,7 @@ void plowControlls(){
         plow.spin(directionType::rev);
     }
     else{
-        plow.stop(brake);
+        plow.stop(hold);
     }
 }
 
@@ -122,6 +122,7 @@ void consoleLog(){
 }
 
 int main() {
+    mtrProperties();
     Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
     Brain.Screen.newLine();
    
