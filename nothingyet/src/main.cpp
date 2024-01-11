@@ -36,12 +36,15 @@ motor_group rightDrive(frontRight, backRight);
 motor_group awd(frontLeft, frontRight, backLeft, backRight);
 motor_group plow(leftPlow, rightPlow);
 int mtrVolt = 8; //MAX 12V DC
-void controlls(){
-    /*leftDrive.spin(directionType::fwd, controller1.Axis4.position() + controller1.Axis3.position(), percentUnits::pct);
-    rightDrive.spin(directionType::fwd, controller1.Axis4.position() - controller1.Axis3.position(), percentUnits::pct);*/
-  // awd.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
-  // leftDrive.spin(directionType::fwd, controller1.Axis3.position(), percentUnits::pct);
-   int lineNum = 1;
+
+void mtrProperties(){ //Starting motor Defaults
+    backRight.setReversed(true);
+    frontRight.setReversed(true);
+    plow.stop(brake);
+}
+void driver(){
+
+   int lineNum = 1; // Console logging
    
    if(controller1.Axis4.position() < -80){
         leftDrive.spin(directionType::rev, mtrVolt, volt);
@@ -69,31 +72,11 @@ void controlls(){
         awd.stop(coast);
         //Brain.Screen.print("Coasting %f\n", Brain.Timer.value());
         //Brain.Screen.newLine();
-   }
-    
+   } 
 }
 
-/*void ArmCONTROL(){
 
-    while (true) {
-
-    Arm.setVelocity(100, percent);
-    Arm.spin(forward);
-
-    wait(1, seconds);
-
-    Arm.setVelocity(100, percent);
-    Arm.spin(reverse);
-
-    wait(1, seconds);
-
-
-
-
-    }
-}*/
-
-void ArmFling(){
+void armFling(){
     if (controller1.ButtonUp.pressing() == true){
         Arm.spin(directionType::rev, 12.0, volt);
         Brain.Screen.printAt( 10, 50, "Forwarding arm!" );
@@ -106,6 +89,16 @@ void ArmFling(){
         Arm.stop(brake);
     }     
 }
+
+
+void buttons(){
+    armFling(); 
+}
+void controlls(){
+    driver(); //Movement Controls
+    btutons(); //Button Controls
+}
+
 void PlowContoll(){
     if(controller1.ButtonR1.pressing() == true){
      leftPlow.spin(directionType::fwd);
@@ -116,18 +109,18 @@ void PlowContoll(){
         rightPlow.spin(directionType::fwd);
     }
 }
+
 int main() {
-  
+    Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
+    Brain.Screen.newLine();
    
     while(1) {
-       //controlls();
-       ArmFling();
+       //driver();
+       //ArmFling();
        if(Brain.Screen.row() > 11){
             Brain.Screen.clearScreen();
             Brain.Screen.setCursor(1, 2);
        }
-       PlowContoll();
-    
        //ArmFling();
         // Allow other tasks to run
         //ArmCONTROL();
