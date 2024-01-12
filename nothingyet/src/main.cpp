@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       MA                                                        */
+/*    Author:       1723A                                                     */
 /*    Created:      12/8/2023, 4:14:31 PM                                     */
 /*    Description:  V5 project                                                */
 /*                                                                            */
@@ -99,10 +99,10 @@ void armFling(){
 
 void plowControlls(){
     if(controller1.ButtonR1.pressing() == true){
-     plow.spin(directionType::fwd);  
+     plow.spin(directionType::fwd, mtrVolt, volt);  
     }
     else if(controller1.ButtonL1.pressing() == true){
-        plow.spin(directionType::rev);
+        plow.spin(directionType::rev, mtrVolt, volt);
     }
     else{
         plow.stop(hold);
