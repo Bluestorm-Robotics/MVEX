@@ -97,13 +97,30 @@ void armFling(){
     }     
 }
 
-void plowControlls(){
-    if(controller1.ButtonR1.pressing() == true){
+void plowControlls(){//L1 L2 for left plow R1/R2 for right
+    if((controller1.ButtonL1.pressing() == true) && (controller1.ButtonR1.pressing() == true)){
      plow.spin(directionType::fwd, mtrVolt, volt);  
     }
-    else if(controller1.ButtonL1.pressing() == true){
+
+    else if((controller1.ButtonL2.pressing() == true) && (controller1.ButtonR2.pressing() == true)){
         plow.spin(directionType::rev, mtrVolt, volt);
     }
+    else if(controller1.ButtonL1.pressing() == true){
+     leftPlow.spin(directionType::fwd, mtrVolt, volt);  
+    }
+
+    else if(controller1.ButtonL2.pressing() == true){
+        leftPlow.spin(directionType::rev, mtrVolt, volt);
+    }
+
+    else if(controller1.ButtonR1.pressing() == true){
+        rightPlow.spin(directionType::fwd, mtrVolt, volt);  
+    }
+
+    else if(controller1.ButtonR2.pressing() == true){
+        rightPlow.spin(directionType::rev, mtrVolt, volt);
+    }
+
     else{
         plow.stop(hold);
     }
