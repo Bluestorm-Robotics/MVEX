@@ -26,8 +26,8 @@ motor backLeft = motor(PORT15);
 motor backRight = motor(PORT5);
 
 //Arm Motor
-motor Arm = motor(PORT10);
-
+motor rightArm = motor(PORT10);
+motor leftArm = motor(PORT20);
 //Plow Motor
 motor leftPlow = motor(PORT12);
 motor rightPlow = motor(PORT3);
@@ -37,12 +37,14 @@ motor_group leftDrive(frontLeft, backLeft);
 motor_group rightDrive(frontRight, backRight);
 motor_group awd(frontLeft, frontRight, backLeft, backRight);
 motor_group plow(leftPlow, rightPlow);
+motor_group Arm(leftArm, rightArm);
 int mtrVolt = 8; //MAX 12V DC
 
 void mtrProperties(){ //Starting motor Defaults
     backRight.setReversed(true);
     frontRight.setReversed(true);
     rightPlow.setReversed(true);
+    leftArm.setReversed(true);
     plow.stop(brake);
 }
 void driver(){
@@ -84,16 +86,19 @@ void autonomous(void){//Autonomous code
 void armFling(){
     if (controller1.ButtonUp.pressing() == true){
         Arm.spin(directionType::rev, 12.0, volt);
+
+        //Arm.spinFor(reverse, 105, degrees, false);
         Brain.Screen.print("Forwarding arm!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
     }
     else if(controller1.ButtonDown.pressing() == true){
         Arm.spin(directionType::fwd, 12.0, volt); 
+        //Arm.spinFor(forward, 105, degrees, false);
         Brain.Screen.print("Reversing arm!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
     }
     else{
-        Arm.stop(brake);
+        Arm.stop(hold);
     }     
 }
 
