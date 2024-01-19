@@ -7,6 +7,7 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
+#include "customLib.h"
 #include "iostream"
 
 using namespace vex;
@@ -16,37 +17,16 @@ controller       controller1;
 
 competition Competition; //Competition mode
 
-// define your global instances of motors and other devices here
-// Front motors
-motor frontLeft = motor(PORT11);
-motor frontRight = motor(PORT1);
-
-//Rear Motors
-motor backLeft = motor(PORT15);
-motor backRight = motor(PORT5);
-
-//Arm Motor
-motor rightArm = motor(PORT10);
-motor leftArm = motor(PORT20);
-//Plow Motor
-motor leftPlow = motor(PORT12);
-motor rightPlow = motor(PORT3);
-
-//motor groups TANK layout :)
-motor_group leftDrive(frontLeft, backLeft);
-motor_group rightDrive(frontRight, backRight);
-motor_group awd(frontLeft, frontRight, backLeft, backRight);
-motor_group plow(leftPlow, rightPlow);
-motor_group Arm(leftArm, rightArm);
-int mtrVolt = 8; //MAX 12V DC
 
 void mtrProperties(){ //Starting motor Defaults
     backRight.setReversed(true);
     frontRight.setReversed(true);
     rightPlow.setReversed(true);
     leftArm.setReversed(true);
-    plow.stop(brake);
+    plow.stop(hold);
+    WheelDiamterCM = 10.58; //10.6 cm
 }
+
 void driver(){
    
    if(controller1.Axis4.position() < -80){
@@ -72,7 +52,7 @@ void driver(){
         Brain.Screen.newLine();
     }
    else{
-        awd.stop(coast);
+        awd.stop(brake);
         //Brain.Screen.print("Coasting %f\n", Brain.Timer.value());
         //Brain.Screen.newLine();
    } 
@@ -81,6 +61,12 @@ void driver(){
 void autonomous(void){//Autonomous code
     Brain.Screen.print("Autonomous code started!!! %f\n", Brain.Timer.value());
     Brain.Screen.newLine();
+
+    moveCM(128);
+    leftPointTurn();
+    moveCM(-15);
+    //Open arm
+    //moveCM(However much to the net)
 }
 
 void armFling(){
@@ -92,7 +78,7 @@ void armFling(){
         Brain.Screen.newLine();
     }
     else if(controller1.ButtonDown.pressing() == true){
-        Arm.spin(directionType::fwd, 12.0, volt); 
+        Arm.spin(directionType::fwd, 8.0, volt); 
         //Arm.spinFor(forward, 105, degrees, false);
         Brain.Screen.print("Reversing arm!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
@@ -131,10 +117,19 @@ void plowControlls(){//L1 L2 for left plow R1/R2 for right
     }
 }
 
+void turoMode(){
+    if(controller1.ButtonX.pressing() == true){
+        mtrVolt = 12.0;
+    }
+    else{
+        mtrVolt = 8.0;
+    }
+}
 
 void buttons(){
     armFling(); //Arm movement
     plowControlls(); //Plow movement
+    turoMode();
 }
 void controlls(){ //Umbrella COntrols module
     while(1){
@@ -159,7 +154,6 @@ void init(){
 int main() {
     Competition.autonomous(autonomous);
     Competition.drivercontrol(controlls);
-    
     init(); //Pre-Autonomos motor configs
     while(1) {
         consoleLog(); //On screen debug console
