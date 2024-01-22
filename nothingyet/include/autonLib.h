@@ -48,6 +48,20 @@ void moveCM(float y){ //move given distance in CM (Y is CM imput Z is direction)
     awd.spinToPosition(x, degrees, true);
 }
 
+void openArm(){
+    bool x = true;
+    plow.spin(directionType::rev, mtrVolt, volt);
+    while(x == true){
+        if(plow.velocity(percent) < 100){
+            plow.stop(hold);
+            x = false;
+        }
+        else{
+            plow.spin(directionType::rev, mtrVolt, volt);
+        }
+    }
+}
+
 
 
 void leftPointTurn(){

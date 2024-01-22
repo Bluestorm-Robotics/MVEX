@@ -7,7 +7,7 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
-#include "customLib.h"
+#include "autonLib.h"
 #include "iostream"
 
 using namespace vex;
@@ -58,14 +58,16 @@ void driver(){
    } 
 }
 
+
 void autonomous(void){//Autonomous code
     Brain.Screen.print("Autonomous code started!!! %f\n", Brain.Timer.value());
     Brain.Screen.newLine();
 
     moveCM(128);
     leftPointTurn();
-    moveCM(-15);
-    //Open arm
+    moveCM(-25);
+    openArm();
+    moveCM(35);
     //moveCM(However much to the net)
 }
 
@@ -125,6 +127,7 @@ void turoMode(){
         mtrVolt = 8.0;
     }
 }
+
 
 void buttons(){
     armFling(); //Arm movement
