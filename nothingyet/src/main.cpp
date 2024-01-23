@@ -22,7 +22,7 @@ void mtrProperties(){ //Starting motor Defaults
     backRight.setReversed(true);
     frontRight.setReversed(true);
     rightPlow.setReversed(true);
-    leftArm.setReversed(true);
+    //leftArm.setReversed(true);
     plow.stop(hold);
     WheelDiamterCM = 10.58; //10.6 cm
 }
@@ -62,16 +62,17 @@ void driver(){
 void autonomous(void){//Autonomous code
     Brain.Screen.print("Autonomous code started!!! %f\n", Brain.Timer.value());
     Brain.Screen.newLine();
-
-    moveCM(128);
-    leftPointTurn();
-    moveCM(-25);
+// Has tendency to slip side of net
+    moveCM(36);
+    pointTurn(25);
+    moveCM(100);
+    pointTurn(-25);
+    pointTurn(-90);
     openArm();
-    moveCM(35);
-    //moveCM(However much to the net)
+    moveCM(45);
 }
 
-void armFling(){
+void armFling(){ // Legacy code no longer in use
     if (controller1.ButtonUp.pressing() == true){
         Arm.spin(directionType::rev, 12.0, volt);
 
@@ -92,26 +93,26 @@ void armFling(){
 
 void plowControlls(){//L1 L2 for left plow R1/R2 for right
     if((controller1.ButtonL1.pressing() == true) && (controller1.ButtonR1.pressing() == true)){
-     plow.spin(directionType::fwd, mtrVolt, volt);  
+     plow.spin(directionType::fwd, plowVolt, volt);  
     }
 
     else if((controller1.ButtonL2.pressing() == true) && (controller1.ButtonR2.pressing() == true)){
-        plow.spin(directionType::rev, mtrVolt, volt);
+        plow.spin(directionType::rev, plowVolt, volt);
     }
     else if(controller1.ButtonL1.pressing() == true){
-     leftPlow.spin(directionType::fwd, mtrVolt, volt);  
+     leftPlow.spin(directionType::fwd, plowVolt, volt);  
     }
 
     else if(controller1.ButtonL2.pressing() == true){
-        leftPlow.spin(directionType::rev, mtrVolt, volt);
+        leftPlow.spin(directionType::rev, plowVolt, volt);
     }
 
     else if(controller1.ButtonR1.pressing() == true){
-        rightPlow.spin(directionType::fwd, mtrVolt, volt);  
+        rightPlow.spin(directionType::fwd, plowVolt, volt);  
     }
 
     else if(controller1.ButtonR2.pressing() == true){
-        rightPlow.spin(directionType::rev, mtrVolt, volt);
+        rightPlow.spin(directionType::rev, plowVolt, volt);
     }
 
     else{
@@ -143,23 +144,22 @@ void controlls(){ //Umbrella COntrols module
 }
 
 void consoleLog(){
-
-    if(Brain.Screen.row() > 11){
-        Brain.Screen.clearScreen();
-        Brain.Screen.setCursor(1, 2);
-       }
+// Code for moving cursor to new line for console log
+    while(1){
+        if(Brain.Screen.row() > 11){
+            Brain.Screen.clearScreen();
+            Brain.Screen.setCursor(1, 2);
+        }
+    }
 }
-void init(){
+void init(){ //First code to run
     mtrProperties();
     Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
     Brain.Screen.newLine();
 }
 int main() {
+    init(); //Pre-Autonomos motor configs
     Competition.autonomous(autonomous);
     Competition.drivercontrol(controlls);
-    init(); //Pre-Autonomos motor configs
-    while(1) {
-        consoleLog(); //On screen debug console
-        this_thread::sleep_for(1);
-    }
+    this_thread::sleep_for(1);
 }
