@@ -2,7 +2,6 @@
 #include <vex.h>
 float WheelDiamterCM = 10.58;
 float robotDiameterCM = 35.65;
-
 using namespace vex;
 
 /// MOTOR CONFIG
@@ -44,24 +43,23 @@ float CalcRadToDeg(float x){
 	return x*(robotDiameterCM/WheelDiamterCM);
 }
 
-void moveCM(float y){ //move given distance in CM (Y is CM imput Z is direction)
+void moveCM(float y, int v){ //move given distance in CM (Y is CM imput Z is direction)
 	float x=convertCMToDegrees(y);
-	rsMotors();
-    awd.spinToPosition(x, degrees, true);
+    awd.spinFor(forward, x, degrees, v, velocityUnits::pct, true);
 }
 
 void openArm(){
-    rsMotors();
+    /*rsMotors();
     rightPlow.spinToPosition(240, degrees, false);
-    leftPlow.spinToPosition(240, degrees, true);
+    leftPlow.spinToPosition(240, degrees, true);*/
+    plow.spin(directionType::rev, 6.0, volt);
+    wait(1.5, seconds);
+    plow.stop(brake);
 }
 
 
 void pointTurn(int x){
     int vpointTurn=CalcRadToDeg(x);
-    rsMotors();
-    leftDrive.spinToPosition(-vpointTurn, degrees, false);
-    rightDrive.spinToPosition(vpointTurn, degrees, true);
-    rsMotors();
-
+    leftDrive.spinFor(-vpointTurn, degrees, 30, velocityUnits::pct, false);
+    rightDrive.spinFor(vpointTurn, degrees, 30, velocityUnits::pct, true);
 }

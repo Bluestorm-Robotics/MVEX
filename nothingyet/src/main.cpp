@@ -10,6 +10,7 @@
 #include "autonLib.h"
 #include "iostream"
 
+
 using namespace vex;
 // A global instance of vex::brain used for printing to the V5 brain screen
 brain       Brain; //After declaring vex namespace there is no need to use vex::brain
@@ -29,29 +30,29 @@ void mtrProperties(){ //Starting motor Defaults
 
 void driver(){
    
-   if(controller1.Axis4.position() < -80){
+   if((controller1.Axis4.position() < -80) || (controller1.ButtonLeft.pressing() == true)){ //Turn left
         leftDrive.spin(directionType::rev, mtrVolt, volt);
         rightDrive.spin(directionType::fwd, mtrVolt, volt);
         Brain.Screen.print("Turning left %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
    }
-    else if(controller1.Axis4.position() > 80){
+    else if((controller1.Axis4.position() > 80) || (controller1.ButtonRight.pressing() == true)){ //Turn right
         leftDrive.spin(directionType::fwd, mtrVolt, volt);
         rightDrive.spin(directionType::rev, mtrVolt, volt);
         Brain.Screen.print("Hard to Starboard!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
    }
-   else if(controller1.Axis3.position() > 80){
+   else if((controller1.Axis3.position() > 80) || (controller1.ButtonUp.pressing() == true)){ //Forward
         awd.spin(directionType::fwd, mtrVolt, volt);
         Brain.Screen.print("Full steam ahead! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
     }
-    else if(controller1.Axis3.position() < -80){
+    else if((controller1.Axis3.position() < -80) || (controller1.ButtonDown.pressing() == true)){ //Reverse
         awd.spin(directionType::rev, mtrVolt, volt); 
         Brain.Screen.print("Reverse!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
     }
-   else{
+   else{ //If not imput brake
         awd.stop(brake);
         //Brain.Screen.print("Coasting %f\n", Brain.Timer.value());
         //Brain.Screen.newLine();
@@ -63,24 +64,18 @@ void autonomous(void){//Autonomous code
     Brain.Screen.print("Autonomous code started!!! %f\n", Brain.Timer.value());
     Brain.Screen.newLine();
 // Has tendency to slip side of net
-    moveCM(36);
+    moveCM(36, 40);
     pointTurn(25);
-    moveCM(100);
+    moveCM(97, 40);
     pointTurn(-25);
     pointTurn(-90);
+    wait(1, seconds);
     openArm();
-    moveCM(45);
+    moveCM(55, 60);
 }
 
 void armFling(){ // Legacy code no longer in use
-    if (controller1.ButtonUp.pressing() == true){
-        Arm.spin(directionType::rev, 12.0, volt);
-
-        //Arm.spinFor(reverse, 105, degrees, false);
-        Brain.Screen.print("Forwarding arm!!! %f\n", Brain.Timer.value());
-        Brain.Screen.newLine();
-    }
-    else if(controller1.ButtonDown.pressing() == true){
+    if(controller1.ButtonA.pressing() == true){
         Arm.spin(directionType::fwd, 8.0, volt); 
         //Arm.spinFor(forward, 105, degrees, false);
         Brain.Screen.print("Reversing arm!!! %f\n", Brain.Timer.value());
@@ -99,6 +94,7 @@ void plowControlls(){//L1 L2 for left plow R1/R2 for right
     else if((controller1.ButtonL2.pressing() == true) && (controller1.ButtonR2.pressing() == true)){
         plow.spin(directionType::rev, plowVolt, volt);
     }
+
     else if(controller1.ButtonL1.pressing() == true){
      leftPlow.spin(directionType::fwd, plowVolt, volt);  
     }
