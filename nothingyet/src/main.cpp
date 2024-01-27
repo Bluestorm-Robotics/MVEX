@@ -10,7 +10,6 @@
 #include "autonLib.h"
 #include "iostream"
 
-
 using namespace vex;
 // A global instance of vex::brain used for printing to the V5 brain screen
 brain       Brain; //After declaring vex namespace there is no need to use vex::brain
@@ -18,12 +17,12 @@ controller       controller1;
 
 competition Competition; //Competition mode
 
+digital_in  d1(Brain.ThreeWirePort.B);
 
 void mtrProperties(){ //Starting motor Defaults
     backRight.setReversed(true);
     frontRight.setReversed(true);
     rightPlow.setReversed(true);
-    //leftArm.setReversed(true);
     plow.stop(hold);
     WheelDiamterCM = 10.58; //10.6 cm
 }
@@ -64,21 +63,41 @@ void autonomous(void){//Autonomous code
     Brain.Screen.print("Autonomous code started!!! %f\n", Brain.Timer.value());
     Brain.Screen.newLine();
 // Has tendency to slip side of net
-    moveCM(36, 40);
-    pointTurn(25);
-    moveCM(97, 40);
-    pointTurn(-25);
-    pointTurn(-90);
-    wait(1, seconds);
-    openArm();
-    moveCM(55, 60);
+    if(defence == true){
+
+        moveCM(36, 40);
+        pointTurn(25);
+        moveCM(97, 40);
+        pointTurn(-25);
+        pointTurn(-90);
+        wait(1, seconds);
+        openArm();
+        moveCM(55, 60);
+    }
+    else{
+        moveCM(36, 40);
+        pointTurn(-25);
+        moveCM(97, 40);
+        pointTurn(25);
+        pointTurn(90);
+        wait(1, seconds);
+        openArm();
+        moveCM(55, 60);
+    }
 }
+
 
 void armFling(){ // Legacy code no longer in use
     if(controller1.ButtonA.pressing() == true){
-        Arm.spin(directionType::fwd, 8.0, volt); 
+        Arm.spin(directionType::rev, 12.0, volt); 
         //Arm.spinFor(forward, 105, degrees, false);
         Brain.Screen.print("Reversing arm!!! %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
+    }
+    if(controller1.ButtonY.pressing() == true){
+        Arm.spin(directionType::fwd, 5, volt); 
+        //Arm.spinFor(forward, 105, degrees, false);
+        Brain.Screen.print("forwarding arm!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
     }
     else{
@@ -148,7 +167,24 @@ void consoleLog(){
         }
     }
 }
+
+void autonConf(){
+    bool confPeriod = true; //COnfig lockout
+    while(confPeriod == true){
+        if(d1.value() == 0){
+            Brain.Screen.print("Switch to offense %f\n", Brain.Timer.value());
+            Brain.Screen.newLine();
+            defence = false;
+            confPeriod = false;
+        }
+        else if(Brain.Timer.value() > 10){
+            confPeriod = false;  
+        }
+    }
+}
+
 void init(){ //First code to run
+    autonConf();
     mtrProperties();
     Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
     Brain.Screen.newLine();

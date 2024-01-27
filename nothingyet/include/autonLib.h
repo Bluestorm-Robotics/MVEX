@@ -19,7 +19,7 @@ motor Arm = motor(PORT10);
 motor leftPlow = motor(PORT12);
 motor rightPlow = motor(PORT3);
 
-//motor groups TANK layout :)
+//motor groups TANK layout :)1
 motor_group leftDrive(frontLeft, backLeft);
 motor_group rightDrive(frontRight, backRight);
 motor_group awd(frontLeft, frontRight, backLeft, backRight);
@@ -27,7 +27,7 @@ motor_group plow(leftPlow, rightPlow);
 //motor_group Arm(leftArm, rightArm);
 int mtrVolt = 8; //MAX 12V DC
 int plowVolt = 6; //MAX 12V DC
-
+bool defence = true;
 
 //throw functions below
 void rsMotors(){
