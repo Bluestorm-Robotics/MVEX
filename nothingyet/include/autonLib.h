@@ -13,8 +13,8 @@ motor backLeft = motor(PORT15);
 motor backRight = motor(PORT5);
 
 //Arm Motor
-motor Arm = motor(PORT10);
-//motor leftArm = motor(PORT20);
+motor rightArm = motor(PORT10);
+motor leftArm = motor(PORT20);
 //Plow Motor
 motor leftPlow = motor(PORT12);
 motor rightPlow = motor(PORT3);
@@ -24,10 +24,10 @@ motor_group leftDrive(frontLeft, backLeft);
 motor_group rightDrive(frontRight, backRight);
 motor_group awd(frontLeft, frontRight, backLeft, backRight);
 motor_group plow(leftPlow, rightPlow);
-//motor_group Arm(leftArm, rightArm);
+motor_group Arm(leftArm, rightArm);
 int mtrVolt = 8; //MAX 12V DC
 int plowVolt = 6; //MAX 12V DC
-bool defence = true;
+bool defence = false;
 
 //throw functions below
 void rsMotors(){
@@ -54,7 +54,16 @@ void openArm(){
     leftPlow.spinToPosition(240, degrees, true);*/
     plow.spin(directionType::rev, 6.0, volt);
     wait(1.5, seconds);
-    plow.stop(brake);
+    plow.stop(hold);
+}
+
+void closeArm(){
+    /*rsMotors();
+    rightPlow.spinToPosition(240, degrees, false);
+    leftPlow.spinToPosition(240, degrees, true);*/
+    plow.spin(directionType::fwd, 6.0, volt);
+    wait(1.5, seconds);
+    plow.stop(hold);
 }
 
 

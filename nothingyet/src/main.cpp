@@ -23,6 +23,7 @@ void mtrProperties(){ //Starting motor Defaults
     backRight.setReversed(true);
     frontRight.setReversed(true);
     rightPlow.setReversed(true);
+    leftArm.setReversed(true);
     plow.stop(hold);
     WheelDiamterCM = 10.58; //10.6 cm
 }
@@ -65,7 +66,8 @@ void autonomous(void){//Autonomous code
 // Has tendency to slip side of net
     if(defence == true){
 
-        moveCM(36, 40);
+        moveCM(43, 40);
+        closeArm();
         pointTurn(25);
         moveCM(97, 40);
         pointTurn(-25);
@@ -75,7 +77,8 @@ void autonomous(void){//Autonomous code
         moveCM(55, 60);
     }
     else{
-        moveCM(36, 40);
+        moveCM(43, 40);
+        closeArm();
         pointTurn(-25);
         moveCM(97, 40);
         pointTurn(25);
@@ -89,7 +92,7 @@ void autonomous(void){//Autonomous code
 
 void armFling(){ // Legacy code no longer in use
     if(controller1.ButtonA.pressing() == true){
-        Arm.spin(directionType::rev, 12.0, volt); 
+        Arm.spin(directionType::rev, 8.0, volt); 
         //Arm.spinFor(forward, 105, degrees, false);
         Brain.Screen.print("Reversing arm!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
@@ -184,7 +187,7 @@ void autonConf(){
 }
 
 void init(){ //First code to run
-    autonConf();
+    //autonConf();
     mtrProperties();
     Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
     Brain.Screen.newLine();
