@@ -5,28 +5,32 @@ float robotDiameterCM = 35.65;
 using namespace vex;
 
 /// MOTOR CONFIG
-motor frontLeft = motor(PORT11);
-motor frontRight = motor(PORT1);
 
-//Rear Motors
-motor backLeft = motor(PORT15);
-motor backRight = motor(PORT5);
+//Drive motors
+motor leftDrive = motor(PORT15);
+motor rightDrive = motor(PORT5);
 
 //Arm Motor
-motor rightArm = motor(PORT10);
-motor leftArm = motor(PORT20);
+motor rightArm = motor(PORT19);
+motor leftArm = motor(PORT10);
 //Plow Motor
 motor leftPlow = motor(PORT12);
 motor rightPlow = motor(PORT3);
 
+//Elevate motors
+
+motor leftElevate = motor(PORT21);
+motor rightElevate = motor(PORT20);
+
+
 //motor groups TANK layout :)1
-motor_group leftDrive(frontLeft, backLeft);
-motor_group rightDrive(frontRight, backRight);
-motor_group awd(frontLeft, frontRight, backLeft, backRight);
+motor_group awd(leftDrive, rightDrive);
 motor_group plow(leftPlow, rightPlow);
 motor_group Arm(leftArm, rightArm);
+motor_group elevate(rightElevate, leftElevate);
 int mtrVolt = 8; //MAX 12V DC
 int plowVolt = 6; //MAX 12V DC
+int elevateVolt = 1; //MAX 12V DC
 bool defence = false;
 
 //throw functions below

@@ -20,10 +20,10 @@ competition Competition; //Competition mode
 digital_in  d1(Brain.ThreeWirePort.B);
 
 void mtrProperties(){ //Starting motor Defaults
-    backRight.setReversed(true);
-    frontRight.setReversed(true);
+    rightDrive.setReversed(true);
     rightPlow.setReversed(true);
     leftArm.setReversed(true);
+    rightElevate.setReversed(true);
     plow.stop(hold);
     WheelDiamterCM = 10.58; //10.6 cm
 }
@@ -138,56 +138,71 @@ void plowControlls(){//L1 L2 for left plow R1/R2 for right
     }
 }
 
-void turoMode(){
+void turboMode(){
     if(controller1.ButtonX.pressing() == true){
         mtrVolt = 12.0;
+        elevateVolt = 100;
     }
     else{
         mtrVolt = 8.0;
+        elevateVolt = 10;
     }
 }
 
+void noclip(){ //arm thingy thing thingy-ma bob / doohickey
+    if(controller1.Axis2.position() > 80){
+        //noclip go uppy up
+        elevate.setVelocity(mtrVolt, percent);
+        elevate.spin(forward);
+      }
+    else if(controller1.Axis2.position() < -80){
+        // noclip go uppy up
+        elevate.setVelocity(mtrVolt, percent);
+        elevate.spin(reverse);
+      }
+    else{
+        elevate.stop(hold);
+    }
+}
 
 void buttons(){
     armFling(); //Arm movement
     plowControlls(); //Plow movement
-    turoMode();
+    turboMode();
+    noclip();
+}
+
+void consoleLog(){
+// Code for moving cursor to new line for console log
+    if(Brain.Screen.row() > 11){
+        Brain.Screen.clearScreen();
+        Brain.Screen.setCursor(1, 2);
+    }
 }
 void controlls(){ //Umbrella COntrols module
     while(1){
-
+        consoleLog();
         driver(); //Movement Controls
         buttons(); //Button Controls
     }
 }
 
-void consoleLog(){
-// Code for moving cursor to new line for console log
-    while(1){
-        if(Brain.Screen.row() > 11){
-            Brain.Screen.clearScreen();
-            Brain.Screen.setCursor(1, 2);
-        }
-    }
-}
 
-void autonConf(){
-    bool confPeriod = true; //COnfig lockout
-    while(confPeriod == true){
-        if(d1.value() == 0){
-            Brain.Screen.print("Switch to offense %f\n", Brain.Timer.value());
-            Brain.Screen.newLine();
-            defence = false;
-            confPeriod = false;
-        }
-        else if(Brain.Timer.value() > 10){
-            confPeriod = false;  
-        }
+void autonModeCheck(){ //Sets autonomous mode for Defence/Offence side
+    if(d1.value() == 1){
+        defence = false; // Autonomous mode
+        Brain.Screen.print("Switch to offense %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
+    }
+    else{
+        defence = true;  
+        Brain.Screen.print("Switch to Defence %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
     }
 }
 
 void init(){ //First code to run
-    //autonConf();
+    autonModeCheck();
     mtrProperties();
     Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
     Brain.Screen.newLine();
