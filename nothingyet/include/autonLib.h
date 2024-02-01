@@ -7,20 +7,20 @@ using namespace vex;
 /// MOTOR CONFIG
 
 //Drive motors
-motor leftDrive = motor(PORT15);
-motor rightDrive = motor(PORT5);
+motor leftDrive = motor(PORT20);
+motor rightDrive = motor(PORT9);
 
 //Arm Motor
-motor rightArm = motor(PORT19);
-motor leftArm = motor(PORT10);
+motor rightArm = motor(PORT21);
+motor leftArm = motor(PORT18);
 //Plow Motor
 motor leftPlow = motor(PORT12);
 motor rightPlow = motor(PORT3);
 
 //Elevate motors
 
-motor leftElevate = motor(PORT21);
-motor rightElevate = motor(PORT20);
+motor leftElevate = motor(PORT19);
+motor rightElevate = motor(PORT10);
 
 
 //motor groups TANK layout :)1

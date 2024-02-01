@@ -92,13 +92,13 @@ void autonomous(void){//Autonomous code
 
 void armFling(){ // Legacy code no longer in use
     if(controller1.ButtonA.pressing() == true){
-        Arm.spin(directionType::rev, 8.0, volt); 
+        Arm.spin(directionType::rev, 5, volt); 
         //Arm.spinFor(forward, 105, degrees, false);
         Brain.Screen.print("Reversing arm!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
     }
     if(controller1.ButtonY.pressing() == true){
-        Arm.spin(directionType::fwd, 5, volt); 
+        Arm.spin(directionType::fwd, 12, volt); 
         //Arm.spinFor(forward, 105, degrees, false);
         Brain.Screen.print("forwarding arm!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
@@ -145,19 +145,19 @@ void turboMode(){
     }
     else{
         mtrVolt = 8.0;
-        elevateVolt = 10;
+        elevateVolt = 20;
     }
 }
 
 void noclip(){ //arm thingy thing thingy-ma bob / doohickey
     if(controller1.Axis2.position() > 80){
         //noclip go uppy up
-        elevate.setVelocity(mtrVolt, percent);
+        elevate.setVelocity(elevateVolt, percent);
         elevate.spin(forward);
       }
     else if(controller1.Axis2.position() < -80){
         // noclip go uppy up
-        elevate.setVelocity(mtrVolt, percent);
+        elevate.setVelocity(elevateVolt, percent);
         elevate.spin(reverse);
       }
     else{
