@@ -98,7 +98,7 @@ void armFling(){ // Legacy code no longer in use
         Brain.Screen.newLine();
     }
     if(controller1.ButtonY.pressing() == true){
-        Arm.spin(directionType::fwd, 12, volt); 
+        Arm.spin(directionType::fwd, 10, volt); 
         //Arm.spinFor(forward, 105, degrees, false);
         Brain.Screen.print("forwarding arm!!! %f\n", Brain.Timer.value());
         Brain.Screen.newLine();
@@ -144,7 +144,7 @@ void turboMode(){
         elevateVolt = 100;
     }
     else{
-        mtrVolt = 8.0;
+        mtrVolt = 9.0;
         elevateVolt = 20;
     }
 }
