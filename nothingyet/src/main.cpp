@@ -17,10 +17,11 @@ controller       controller1;
 
 competition Competition; //Competition mode
 
-digital_in  d1(Brain.ThreeWirePort.B);
+digital_in  d1(Brain.ThreeWirePort.A);
 
 void mtrProperties(){ //Starting motor Defaults
-    rightDrive.setReversed(true);
+    frontRightDrive.setReversed(true);
+    backRightDrive.setReversed(true);
     rightPlow.setReversed(true);
     leftArm.setReversed(true);
     rightElevate.setReversed(true);
@@ -53,39 +54,34 @@ void driver(){
         Brain.Screen.newLine();
     }
    else{ //If not imput brake
-        awd.stop(brake);
-        //Brain.Screen.print("Coasting %f\n", Brain.Timer.value());
+        awd.stop(hold);
+        //Brain.Scr een.print("Coasting %f\n", Brain.Timer.value());
         //Brain.Screen.newLine();
    } 
 }
 
-
-void autonomous(void){//Autonomous code
-    Brain.Screen.print("Autonomous code started!!! %f\n", Brain.Timer.value());
-    Brain.Screen.newLine();
-// Has tendency to slip side of net
-    if(defence == true){
-
-        moveCM(43, 40);
-        closeArm();
-        pointTurn(25);
-        moveCM(97, 40);
-        pointTurn(-25);
-        pointTurn(-90);
-        wait(1, seconds);
-        openArm();
-        moveCM(55, 60);
+void autonModeCheck(){ //Sets autonomous mode for Defence/Offence side
+    if(d1.value() == 1){
+        defence = false; // Autonomous mode
+        Brain.Screen.print("Switch to offense %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
     }
     else{
-        moveCM(43, 40);
-        closeArm();
-        pointTurn(-25);
-        moveCM(97, 40);
-        pointTurn(25);
-        pointTurn(90);
-        wait(1, seconds);
-        openArm();
-        moveCM(55, 60);
+        defence = true;  
+        Brain.Screen.print("Switch to Defence %f\n", Brain.Timer.value());
+        Brain.Screen.newLine();
+    }
+}
+
+void autonomous(void){//Autonomous code
+    Brain.Screen.print("Taking the Helm captain! %f\n", Brain.Timer.value());
+    Brain.Screen.newLine();
+    bool skills = true;
+    if(skills == false){
+        matchAuton();
+    }
+    else{
+        skillsAuton();
     }
 }
 
@@ -188,21 +184,8 @@ void controlls(){ //Umbrella COntrols module
 }
 
 
-void autonModeCheck(){ //Sets autonomous mode for Defence/Offence side
-    if(d1.value() == 1){
-        defence = false; // Autonomous mode
-        Brain.Screen.print("Switch to offense %f\n", Brain.Timer.value());
-        Brain.Screen.newLine();
-    }
-    else{
-        defence = true;  
-        Brain.Screen.print("Switch to Defence %f\n", Brain.Timer.value());
-        Brain.Screen.newLine();
-    }
-}
-
 void init(){ //First code to run
-    autonModeCheck();
+    //autonModeCheck();
     mtrProperties();
     Brain.Screen.printAt( 10, 50, "Awaiting orders Captain!!" );
     Brain.Screen.newLine();

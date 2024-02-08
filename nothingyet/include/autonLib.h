@@ -1,14 +1,17 @@
 #include <math.h>
 #include <vex.h>
-float WheelDiamterCM = 10.58;
-float robotDiameterCM = 35.65;
+float WheelDiamterCM = 10.064;
+float robotDiameterCM = 34.3;
 using namespace vex;
 
 /// MOTOR CONFIG
 
 //Drive motors
-motor leftDrive = motor(PORT20);
-motor rightDrive = motor(PORT9);
+motor frontLeftDrive = motor(PORT20);
+motor frontRightDrive = motor(PORT9);
+
+motor backLeftDrive = motor(PORT17);
+motor backRightDrive = motor(PORT8);
 
 //Arm Motor
 motor rightArm = motor(PORT21);
@@ -24,14 +27,16 @@ motor rightElevate = motor(PORT10);
 
 
 //motor groups TANK layout :)1
-motor_group awd(leftDrive, rightDrive);
+motor_group leftDrive(backLeftDrive, frontLeftDrive);
+motor_group rightDrive(backRightDrive, frontRightDrive);
+motor_group awd(frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive);
 motor_group plow(leftPlow, rightPlow);
 motor_group Arm(leftArm, rightArm);
 motor_group elevate(rightElevate, leftElevate);
 int mtrVolt = 8; //MAX 12V DC
 int plowVolt = 6; //MAX 12V DC
 int elevateVolt = 1; //MAX 12V DC
-bool defence = false;
+bool defence = true;
 
 //throw functions below
 void rsMotors(){
@@ -47,7 +52,7 @@ float CalcRadToDeg(float x){
 	return x*(robotDiameterCM/WheelDiamterCM);
 }
 
-void moveCM(float y, int v){ //move given distance in CM (Y is CM imput Z is direction)
+void moveCM(float y, int v){ //move given distance in CM (Y is CM imput v is mtr power)
 	float x=convertCMToDegrees(y);
     awd.spinFor(forward, x, degrees, v, velocityUnits::pct, true);
 }
@@ -75,4 +80,47 @@ void pointTurn(int x){
     int vpointTurn=CalcRadToDeg(x);
     leftDrive.spinFor(-vpointTurn, degrees, 30, velocityUnits::pct, false);
     rightDrive.spinFor(vpointTurn, degrees, 30, velocityUnits::pct, true);
+}
+void rightPointTurn(int x){
+    int vpointTurn=CalcRadToDeg(x);
+    leftDrive.spinFor(vpointTurn, degrees, 30, velocityUnits::pct, true);
+}
+
+void matchAuton(){
+    if(defence == true){
+    moveCM(53, 40);
+    closeArm();
+    pointTurn(25);
+    moveCM(92, 40);
+    pointTurn(-25);
+    pointTurn(-90);
+    wait(1, seconds);
+    openArm();
+    moveCM(55, 60);
+    }
+    else{
+    moveCM(53, 40);
+    closeArm();
+    pointTurn(-25);
+    moveCM(92, 40);
+    pointTurn(25);
+    pointTurn(90);
+    wait(1, seconds);
+    openArm();
+    moveCM(55, 60);
+    }
+}
+void noFriends(){ //function for automatic triball firing
+    Arm.spin(directionType::fwd, 12.0, volt); 
+}
+
+void skillsAuton(){//Autonomous skills matches
+    moveCM(21.59, 100); //Roughly 8.5 in
+    moveCM(-21.59, 50);
+    moveCM(21.59, 100);
+    moveCM(-66, 50);
+    rightPointTurn(35);
+    //awd.brake(hold);
+    noFriends();
+
 }
