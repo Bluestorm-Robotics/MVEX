@@ -36,7 +36,7 @@ motor_group elevate(rightElevate, leftElevate);
 int mtrVolt = 8; //MAX 12V DC
 int plowVolt = 6; //MAX 12V DC
 int elevateVolt = 1; //MAX 12V DC
-bool defence = true;
+bool defence = false;
 
 //throw functions below
 void rsMotors(){
@@ -75,6 +75,16 @@ void closeArm(){
     plow.stop(hold);
 }
 
+void closeLeftArm(){
+    leftPlow.spin(directionType::fwd, 2.0, volt);
+    wait(1.5, seconds);
+    plow.stop(hold);
+}
+void closeRightArm(){
+    rightPlow.spin(directionType::fwd, 2.0, volt);
+    wait(1.5, seconds);
+    plow.stop(hold);
+}
 
 void pointTurn(int x){
     int vpointTurn=CalcRadToDeg(x);
@@ -88,7 +98,8 @@ void rightPointTurn(int x){
 
 void matchAuton(){
     if(defence == true){
-    moveCM(53, 40);
+    closeRightArm();
+    moveCM(45.72, 35);
     closeArm();
     pointTurn(25);
     moveCM(92, 40);
@@ -97,9 +108,11 @@ void matchAuton(){
     wait(1, seconds);
     openArm();
     moveCM(55, 60);
+    moveCM(-15, 60);
     }
     else{
-    moveCM(53, 40);
+    closeLeftArm();
+    moveCM(45.72, 35);
     closeArm();
     pointTurn(-25);
     moveCM(92, 40);
@@ -108,6 +121,7 @@ void matchAuton(){
     wait(1, seconds);
     openArm();
     moveCM(55, 60);
+    moveCM(-15, 60);
     }
 }
 void noFriends(){ //function for automatic triball firing
@@ -119,7 +133,7 @@ void skillsAuton(){//Autonomous skills matches
     moveCM(-21.59, 50);
     moveCM(21.59, 100);
     moveCM(-66, 50);
-    rightPointTurn(35);
+    rightPointTurn(40);
     //awd.brake(hold);
     noFriends();
 

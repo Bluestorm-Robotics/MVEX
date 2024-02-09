@@ -59,6 +59,42 @@ void driver(){
         //Brain.Screen.newLine();
    } 
 }
+void arcadeDrive(){
+  int deadband = 5;
+
+    // Get the velocity percentage of the left motor. (Axis3 + Axis4)
+    int leftMotorSpeed =
+        controller1.Axis3.position() + controller1.Axis4.position();
+    // Get the velocity percentage of the right motor. (Axis3 - Axis4)
+    int rightMotorSpeed =
+        controller1.Axis3.position() - controller1.Axis4.position();
+
+    // Set the speed of the left motor. If the value is less than the deadband,
+    // set it to zero.
+    if (abs(leftMotorSpeed) < deadband) {
+      // Set the speed to zero.
+      leftDrive.setVelocity(0, percent);
+    } else {
+      // Set the speed to leftMotorSpeed
+      leftDrive.setVelocity(leftMotorSpeed, percent);
+    }
+
+    // Set the speed of the right motor. If the value is less than the deadband,
+    // set it to zero.
+    if (abs(rightMotorSpeed) < deadband) {
+      // Set the speed to zero
+      rightDrive.setVelocity(0, percent);
+    } else {
+      // Set the speed to rightMotorSpeed
+      rightDrive.setVelocity(rightMotorSpeed, percent);
+    }
+
+    // Spin both motors in the forward direction.
+    leftDrive.spin(forward);
+    rightDrive.spin(forward);
+
+    wait(25, msec);
+}
 
 void autonModeCheck(){ //Sets autonomous mode for Defence/Offence side
     if(d1.value() == 1){
@@ -178,6 +214,7 @@ void consoleLog(){
 void controlls(){ //Umbrella COntrols module
     while(1){
         consoleLog();
+        //arcadeDrive(); terrible
         driver(); //Movement Controls
         buttons(); //Button Controls
     }
