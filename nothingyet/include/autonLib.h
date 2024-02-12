@@ -107,7 +107,7 @@ void matchAuton(){
     pointTurn(-90);
     wait(1, seconds);
     openArm();
-    moveCM(55, 60);
+    moveCM(45, 60);
     moveCM(-15, 60);
     }
     else{
@@ -120,7 +120,7 @@ void matchAuton(){
     pointTurn(90);
     wait(1, seconds);
     openArm();
-    moveCM(55, 60);
+    moveCM(45, 60);
     moveCM(-15, 60);
     }
 }

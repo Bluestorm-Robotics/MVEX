@@ -112,7 +112,7 @@ void autonModeCheck(){ //Sets autonomous mode for Defence/Offence side
 void autonomous(void){//Autonomous code
     Brain.Screen.print("Taking the Helm captain! %f\n", Brain.Timer.value());
     Brain.Screen.newLine();
-    bool skills = true;
+    bool skills = false;
     if(skills == false){
         matchAuton();
     }
