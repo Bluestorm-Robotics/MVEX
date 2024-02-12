@@ -10,7 +10,7 @@ using namespace vex;
 motor frontLeftDrive = motor(PORT20);
 motor frontRightDrive = motor(PORT9);
 
-motor backLeftDrive = motor(PORT17);
+motor backLeftDrive = motor(PORT19);
 motor backRightDrive = motor(PORT8);
 
 //Arm Motor
@@ -22,7 +22,7 @@ motor rightPlow = motor(PORT3);
 
 //Elevate motors
 
-motor leftElevate = motor(PORT19);
+motor leftElevate = motor(PORT17);
 motor rightElevate = motor(PORT10);
 
 
