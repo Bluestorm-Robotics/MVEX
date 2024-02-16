@@ -133,7 +133,7 @@ void armFling(){ // Legacy code no longer in use
         Arm.spin(directionType::fwd, 10, volt); 
         //Arm.spinFor(forward, 105, degrees, false);
         Brain.Screen.print("forwarding arm!!! %f\n", Brain.Timer.value());
-        Brain.Screen.newLine();
+        Brain.Screen.newLine(); 
     }
     else{
         Arm.stop(hold);

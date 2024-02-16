@@ -7,14 +7,14 @@ using namespace vex;
 /// MOTOR CONFIG
 
 //Drive motors
-motor frontLeftDrive = motor(PORT20);
-motor frontRightDrive = motor(PORT9);
+motor frontLeftDrive = motor(PORT15);
+motor frontRightDrive = motor(PORT21);
 
-motor backLeftDrive = motor(PORT19);
-motor backRightDrive = motor(PORT8);
+motor backLeftDrive = motor(PORT11);
+motor backRightDrive = motor(PORT20);
 
 //Arm Motor
-motor rightArm = motor(PORT21);
+motor rightArm = motor(PORT1);
 motor leftArm = motor(PORT18);
 //Plow Motor
 motor leftPlow = motor(PORT12);
@@ -34,7 +34,7 @@ motor_group plow(leftPlow, rightPlow);
 motor_group Arm(leftArm, rightArm);
 motor_group elevate(rightElevate, leftElevate);
 int mtrVolt = 8; //MAX 12V DC
-int plowVolt = 6; //MAX 12V DC
+int plowVolt = 10; //MAX 12V DC
 int elevateVolt = 1; //MAX 12V DC
 bool defence = false;
 
