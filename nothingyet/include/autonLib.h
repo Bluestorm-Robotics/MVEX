@@ -1,7 +1,7 @@
 #include <math.h>
 #include <vex.h>
 float WheelDiamterCM = 10.064;
-float robotDiameterCM = 34.3;
+float robotDiameterCM = 42.418;
 using namespace vex;
 
 /// MOTOR CONFIG
@@ -14,8 +14,8 @@ motor backLeftDrive = motor(PORT11);
 motor backRightDrive = motor(PORT20);
 
 //Arm Motor
-motor rightArm = motor(PORT1);
-motor leftArm = motor(PORT18);
+motor rightArm = motor(PORT18);
+motor leftArm = motor(PORT1);
 //Plow Motor
 motor leftPlow = motor(PORT12);
 motor rightPlow = motor(PORT3);
@@ -61,7 +61,7 @@ void openArm(){
     /*rsMotors();
     rightPlow.spinToPosition(240, degrees, false);
     leftPlow.spinToPosition(240, degrees, true);*/
-    plow.spin(directionType::rev, 6.0, volt);
+    plow.spin(directionType::fwd, 6.0, volt);
     wait(1.5, seconds);
     plow.stop(hold);
 }
@@ -70,7 +70,7 @@ void closeArm(){
     /*rsMotors();
     rightPlow.spinToPosition(240, degrees, false);
     leftPlow.spinToPosition(240, degrees, true);*/
-    plow.spin(directionType::fwd, 6.0, volt);
+    plow.spin(directionType::rev, 6.0, volt);
     wait(1.5, seconds);
     plow.stop(hold);
 }
@@ -98,30 +98,34 @@ void rightPointTurn(int x){
 
 void matchAuton(){
     if(defence == true){
-    closeRightArm();
-    moveCM(45.72, 35);
     closeArm();
+    moveCM(45.72, 35);
     pointTurn(25);
     moveCM(92, 40);
     pointTurn(-25);
     pointTurn(-90);
     wait(1, seconds);
-    openArm();
     moveCM(45, 60);
-    moveCM(-15, 60);
+    openArm();
+    moveCM(-10, 60);
+    pointTurn(180);
+    moveCM(-10, 100);
+    moveCM(15, 50);
     }
     else{
-    closeLeftArm();
-    moveCM(45.72, 35);
     closeArm();
+    moveCM(45.72, 35);
     pointTurn(-25);
     moveCM(92, 40);
     pointTurn(25);
     pointTurn(90);
     wait(1, seconds);
-    openArm();
     moveCM(45, 60);
-    moveCM(-15, 60);
+    openArm();
+    moveCM(-10, 60);
+    pointTurn(180);
+    moveCM(-10, 100);
+    moveCM(15, 50);
     }
 }
 void noFriends(){ //function for automatic triball firing
@@ -138,3 +142,5 @@ void skillsAuton(){//Autonomous skills matches
     noFriends();
 
 }
+
+//rest in peace ql community

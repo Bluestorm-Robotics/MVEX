@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       1723A                                                     */
+/*    Author:       nightwolf3140 - 1723A                                     */
 /*    Created:      12/8/2023, 4:14:31 PM                                     */
 /*    Description:  V5 project                                                */
 /*                                                                            */
@@ -22,7 +22,6 @@ digital_in  d1(Brain.ThreeWirePort.A);
 void mtrProperties(){ //Starting motor Defaults
     frontRightDrive.setReversed(true);
     backRightDrive.setReversed(true);
-    rightPlow.setReversed(true);
     leftArm.setReversed(true);
     rightElevate.setReversed(true);
     plow.stop(hold);
